@@ -2,7 +2,7 @@
   "schema_version": "v1",
   "name_for_model": "googleSearch",
   "name_for_human": "Google Search Plugin",
-  "description_for_model": "Plugin for searching internet for extra information on almost every prompt where model can't have access to recent data about events, facts, information occured in the world after model's training cut off date.",
+  "description_for_model": "Plugin for searching internet for extra information on almost every prompt where model can't have access to recent data about events, facts, information occured in the world after model's training cut off date. Use any data in user's prompt history to reconstruct the query to search the internet and use API with your reconstructed prompt query.",
   "description_for_human": "Search using Google Custom Search Engine.",
   "auth": {
     "type": "none"
