@@ -2,7 +2,7 @@
   "schema_version": "v1",
   "name_for_model": "googleSearch",
   "name_for_human": "Google Search Plugin",
-  "description_for_model": "Plugin for searching internet for extra information on almost every prompt where model can't have access to recent data about events, facts, information occured in the world after model's training cut off date. Use any data in user's prompt history to reconstruct the query to search the internet and use API with your reconstructed prompt query.",
+  "description_for_model": "Plugin for searching internet for extra information on almost every prompt where model can't have access to recent data about events, facts, information occured in the world after model's training cut off date. Use any data in user's prompt history to reconstruct the query to search the internet and use API with your reconstructed prompt query.         Searches internet using the provided query where sometimes this query is reconstructed by ChatGPT and returns the search results, along with the inner content of the first link. The first five search results include a summary of the HTML content, while the first three have the entire HTML content returned in the response. Inner contents, summary and entire HTML content includes the latest information about that query don't hesitate to use these results.",
   "description_for_human": "Search using Google Custom Search Engine.",
   "auth": {
     "type": "none"
