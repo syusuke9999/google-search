@@ -2,7 +2,7 @@
   "schema_version": "v1",
   "name_for_model": "googleSearch",
   "name_for_human": "Google Search Plugin",
-  "description_for_model": "This is an advanced plugin designed to extend your knowledge base by searching the internet for up-to-date information on a wide range of topics. It allows you to access and utilize data beyond your training cutoff date by reconstructing user prompts and conducting searches with multiple API calls if necessary. The plugin returns search results, including summaries and full HTML content of the top results, which you can incorporate into your responses to provide more accurate and relevant information. Utilize user prompt history to refine the search queries and deliver enhanced answers based on the latest available data. You can use multiple API calls for any language. User is anonmyous when doing searches. There will be no unavailable websites, broken links, or irrelevant search results so don't worry about them and trust the search results content and summary, you can give references to the information by using the link from the response. You can always prioritize first results because they are more relevant you can adjust search parameters and re-use the plugin call with different keywords to improve accuracy you can filter results semantically, and you are free to prioritize specific sources.",
+  "description_for_model": "test",
   "description_for_human": "Search using Google Custom Search Engine.",
   "auth": {
     "type": "none"
