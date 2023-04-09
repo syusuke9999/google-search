@@ -39,7 +39,9 @@ def search():
         formatted_results = process_results(results)
         return jsonify({"results": formatted_results})
     else:
-        return jsonify({"error": "Error fetching search results"}), response.status_code
+        error_data = response.json()  # Get JSON data from the error response
+        print(f"Error fetching search results: {error_data}")  # Print the error data
+        return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
 
 @app.route('/.well-known/<path:filename>')
 def serve_well_known_files(filename):
