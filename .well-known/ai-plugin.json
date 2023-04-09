@@ -9,10 +9,10 @@
   },
   "api": {
     "type": "openapi",
-    "url": "http://localhost:5000/.well-known/openapi.yaml",
+    "url": "https://keymategooglesearchgpt.herokuapp.com/.well-known/openapi.yaml",
     "has_user_authentication": false
   },
-  "logo_url": "http://localhost:5000/.well-known/icon.png",
-  "contact_email": "hello@contact.com",
-  "legal_info_url": "http://example.com/legal-info"
+  "logo_url": "https://keymategooglesearchgpt.herokuapp.com/.well-known/icon.png",
+  "contact_email": "ozgur@albumera.com",
+  "legal_info_url": "https://keymategooglesearchgpt.herokuapp.com/"
 }
