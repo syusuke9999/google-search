@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 class SearchResult:
     def __init__(self, title, link):
@@ -39,8 +41,36 @@ def fetch_content(url, summary=False):
         else:
             return None
     except Exception as e:
-        print(f"Error fetching content: {e}")
-        return None
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
+            # Use Selenium to fetch content
+            options = webdriver.ChromeOptions()
+            options.add_argument('--headless')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+            driver.get(url)
+            html_content = driver.page_source
+            driver.quit()
+            soup = BeautifulSoup(html_content, 'lxml')
+            text = ' '.join(soup.stripped_strings)
+            words = text.split()
+
+            if len(words) > 3500:
+                words = words[:3500]
+                text = ' '.join(words)
+
+            if summary:
+                return text[:3500] + '...'
+            else:
+                return text
+        except Exception as e:
+            print(f"Error fetching content: {e}")
+            return None
 
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
