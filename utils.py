@@ -26,7 +26,16 @@ def fetch_content(url, summary=False):
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
-            return text[:3500] + '...' if summary else text[:3500]
+            words = text.split()
+            
+            if len(words) > 3500:
+                words = words[:3500]
+                text = ' '.join(words)
+
+            if summary:
+                return text[:3500] + '...'
+            else:
+                return text
         else:
             return None
     except Exception as e:
