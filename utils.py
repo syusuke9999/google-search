@@ -32,12 +32,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 3500:
-                words = words[:3500]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:3500] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         else:
@@ -64,12 +64,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 3500:
-                words = words[:3500]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:3500] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         except Exception as e:
