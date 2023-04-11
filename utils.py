@@ -46,7 +46,7 @@ def fetch_content(url, summary=False):
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-            # Use Selenium to fetch content
+            # Use Selenium to fetch conten
             options = Options()
             options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
             options.add_argument('--headless')
