@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Keymate Web Search Plugin API
+  title: Keymate Web Search API
   description: A Flask app that uses the Google Custom Search API to search the web.
   version: 1.0.0
 
