@@ -30,14 +30,14 @@ def search():
     if not query:
         return jsonify({"error": "No query provided"}), 400
     
-    url = f"https://www.googleapis.com/customsearch/v1/siterestrict?key={API_KEY}&cx={CX}&q={query}&num=9"
+    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num=9"
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
         results = data.get('items', [])
         formatted_results = process_results(results)
-        return jsonify({"results": data})
+        return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
         print(f"Error fetching search results: {error_data}")  # Print the error data
