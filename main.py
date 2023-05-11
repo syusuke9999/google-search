@@ -37,7 +37,7 @@ def search():
         data = response.json()
         results = data.get('items', [])
         formatted_results = process_results(results)
-        return jsonify({"results": formatted_results})
+        return jsonify({"results": data})
     else:
         error_data = response.json()  # Get JSON data from the error response
         print(f"Error fetching search results: {error_data}")  # Print the error data
