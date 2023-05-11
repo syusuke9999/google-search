@@ -30,7 +30,7 @@ def search():
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
-    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}"
+    url = f"https://www.googleapis.com/customsearch/v1/siterestrict?key={API_KEY}&cx={CX}&q={query}"
     response = requests.get(url)
 
     if response.status_code == 200:
