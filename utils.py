@@ -26,7 +26,7 @@ def fetch_content(url, summary=False):
     Returns a summary if the summary parameter is set to True.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
