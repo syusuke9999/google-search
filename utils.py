@@ -86,10 +86,10 @@ def fetch_content(url, summary=False):
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
 
-    for result in formatted_results[:4]:
+    for result in formatted_results[:5]:
         result.summary = fetch_content(result.link, summary=True) or "Error fetching summary"
 
-    for result in formatted_results[:2]:
+    for result in formatted_results[:3]:
         result.full_content = fetch_content(result.link, summary=False) or "Error fetching content"
 
     return [res.to_dict() for res in formatted_results]
