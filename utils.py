@@ -32,12 +32,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 2000:
-                words = words[:2000]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:2000] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         else:
@@ -57,19 +57,26 @@ def fetch_content(url, summary=False):
 
 
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-            driver.get(url)
-            html_content = driver.page_source
-            driver.quit()
+            driver.set_page_load_timeout(10)
+            
+            try:
+                driver.get(url)
+                html_content = driver.page_source
+            except TimeoutException:
+                print("Timed out waiting for page to load")
+                html_content = "This url is giving page fetch timeout change the query."
+            finally:
+                driver.quit()
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 2000:
-                words = words[:2000]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:2000] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         except Exception as e:
