@@ -32,12 +32,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 2000:
+                words = words[:2000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:2000] + '...'
             else:
                 return text
         else:
@@ -64,12 +64,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 2000:
+                words = words[:2000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:2000] + '...'
             else:
                 return text
         except Exception as e:
@@ -79,10 +79,10 @@ def fetch_content(url, summary=False):
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
 
-    for result in formatted_results[:5]:
+    for result in formatted_results[:4]:
         result.summary = fetch_content(result.link, summary=True) or "Error fetching summary"
 
-    for result in formatted_results[:3]:
+    for result in formatted_results[:2]:
         result.full_content = fetch_content(result.link, summary=False) or "Error fetching content"
 
     return [res.to_dict() for res in formatted_results]
