@@ -26,18 +26,18 @@ def fetch_content(url, summary=False):
     Returns a summary if the summary parameter is set to True.
     """
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=5)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 2000:
+                words = words[:2000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:2000] + '...'
             else:
                 return text
         else:
@@ -57,7 +57,7 @@ def fetch_content(url, summary=False):
 
 
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-            driver.set_page_load_timeout(10)
+            driver.set_page_load_timeout(5)
             
             try:
                 driver.get(url)
@@ -71,12 +71,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 2000:
+                words = words[:2000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:2000] + '...'
             else:
                 return text
         except Exception as e:
@@ -86,10 +86,8 @@ def fetch_content(url, summary=False):
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
 
-    for result in formatted_results[:4]:
-        result.summary = fetch_content(result.link, summary=True) or "Error fetching summary"
+    for result in formatted_results[:5]:
+        result.summary = fetch_content(result.link, summary=False) or "Error fetching summary"
 
-    for result in formatted_results[:2]:
-        result.full_content = fetch_content(result.link, summary=False) or "Error fetching content"
 
     return [res.to_dict() for res in formatted_results]
