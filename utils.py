@@ -27,18 +27,18 @@ def fetch_content(url, summary=False):
     Returns a summary if the summary parameter is set to True.
     """
     try:
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, timeout=4)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 2000:
-                words = words[:2000]
+            if len(words) > 1500:
+                words = words[:1500]
                 text = ' '.join(words)
 
             if summary:
-                return text[:2000] + '...'
+                return text[:1500] + '...'
             else:
                 return text
         else:
@@ -58,7 +58,7 @@ def fetch_content(url, summary=False):
 
 
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-            driver.set_page_load_timeout(5)
+            driver.set_page_load_timeout(4)
             
             try:
                 driver.get(url)
@@ -72,12 +72,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 2000:
-                words = words[:2000]
+            if len(words) > 1500:
+                words = words[:1500]
                 text = ' '.join(words)
 
             if summary:
-                return text[:2000] + '...'
+                return text[:1500] + '...'
             else:
                 return text
         except Exception as e:
@@ -90,7 +90,7 @@ def process_results(results):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:4]}
+        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:3]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
