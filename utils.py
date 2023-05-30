@@ -90,14 +90,14 @@ def process_results(results):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:5]}
+        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:4]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                result.full_content = future.result() or "Error fetching summary"
+                result.full_content = future.result() or "Error fetching content"
             except Exception as e:
                 print(f"Error in fetch_content: {e}")
-                result.full_content = "Error fetching summary"
+                result.full_content = "Error fetching content"
 
     return [res.to_dict() for res in formatted_results]
