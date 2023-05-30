@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import concurrent.futures
 
 class SearchResult:
     def __init__(self, title, link):
@@ -85,9 +86,18 @@ def fetch_content(url, summary=False):
 
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
+    
+    # Initialize a ThreadPoolExecutor
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Create a future for each result
+        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:5]}
 
-    for result in formatted_results[:5]:
-        result.summary = fetch_content(result.link, summary=False) or "Error fetching summary"
-
+        for future in concurrent.futures.as_completed(futures):
+            result = futures[future]
+            try:
+                result.full_content = future.result() or "Error fetching summary"
+            except Exception as e:
+                print(f"Error in fetch_content: {e}")
+                result.full_content = "Error fetching summary"
 
     return [res.to_dict() for res in formatted_results]
