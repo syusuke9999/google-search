@@ -12,7 +12,7 @@ paths:
       operationId: searchGet
       summary: Search Google and fetch HTML content
       description: |
-        Searches internet using the provided query that is recreated by ChatGPT and returns the search results. Use alternative keywords and append -filetype:pdf to query if ResponseTooLargeError occurs because of a file url.
+        Searches internet using the provided query that is recreated by ChatGPT and returns the search results. Use alternative keywords and append -filetype:pdf -filetype:ppt -filetype:doc to query if ResponseTooLargeError occurs.
       parameters:
         - name: q
           in: query
