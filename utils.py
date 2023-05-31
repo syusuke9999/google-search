@@ -21,7 +21,7 @@ class SearchResult:
             'full_content': self.full_content
         }
 
-def fetch_content(url, summary=False):
+def fetch_content(url, summary=False, responseTooLarge=1):
     """
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
@@ -36,12 +36,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 3000:
-                words = words[:3000]
+            if len(words) > int(2000/responseTooLarge):
+                words = words[:int(2000/responseTooLarge)]
                 text = ' '.join(words)
 
             if summary:
-                return text[:3000] + '...'
+                return text[:int(2000/responseTooLarge)] + '...'
             else:
                 return text
         else:
@@ -75,25 +75,25 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 3000:
-                words = words[:3000]
+            if len(words) > int(2000/responseTooLarge):
+                words = words[:int(2000/responseTooLarge)]
                 text = ' '.join(words)
 
             if summary:
-                return text[:3000] + '...'
+                return text[:int(2000/responseTooLarge)] + '...'
             else:
                 return text
         except Exception as e:
             print(f"Error fetching content: {e}")
             return None
 
-def process_results(results):
+def process_results(results,responseTooLarge):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
     
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:10]}
+        futures = {executor.submit(fetch_content, result.link, summary=False, responseTooLarge): result for result in formatted_results[:10]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
