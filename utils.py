@@ -66,7 +66,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             try:
                 driver.get(url)
                 html_content = driver.page_source
-            except TimeoutException:
+            except Exception:
                 print("Timed out waiting for page to load")
                 html_content = "This url is giving page fetch timeout change the query."
             finally:
