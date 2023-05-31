@@ -35,13 +35,13 @@ def fetch_content(url, summary=False, responseTooLarge=1):
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            
-            if len(words) > int(2000/responseTooLarge):
-                words = words[:int(2000/responseTooLarge)]
+            fall = 2000/responseTooLarge
+            if len(words) > fall:
+                words = words[:fall]
                 text = ' '.join(words)
 
             if summary:
-                return text[:int(2000/responseTooLarge)] + '...'
+                return text[:fall] + '...'
             else:
                 return text
         else:
@@ -74,13 +74,13 @@ def fetch_content(url, summary=False, responseTooLarge=1):
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-
-            if len(words) > int(2000/responseTooLarge):
-                words = words[:int(2000/responseTooLarge)]
+            fall = 2000/responseTooLarge
+            if len(words) > fall:
+                words = words[:fall]
                 text = ' '.join(words)
 
             if summary:
-                return text[:int(2000/responseTooLarge)] + '...'
+                return text[:fall] + '...'
             else:
                 return text
         except Exception as e:
