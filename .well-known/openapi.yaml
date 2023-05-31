@@ -21,6 +21,13 @@ paths:
           schema:
             type: string
           example: python
+        - name: responseTooLarge
+          in: query
+          description: Increase if responseTooLarge occurs
+          required: false
+          schema:
+            type: string
+          example: 1
       responses:
         '200':
           description: Successful operation
