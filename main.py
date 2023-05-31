@@ -27,6 +27,7 @@ def get_plugin_info():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
+    responseTooLarge = request.args.get('responseTooLarge', '')
     if not query:
         return jsonify({"error": "No query provided"}), 400
     
@@ -36,7 +37,7 @@ def search():
     if response.status_code == 200:
         data = response.json()
         results = data.get('items', [])
-        formatted_results = process_results(results)
+        formatted_results = process_results(results,responseTooLarge)
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
