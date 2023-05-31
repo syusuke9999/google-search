@@ -36,12 +36,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
             
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         else:
@@ -75,12 +75,12 @@ def fetch_content(url, summary=False):
             text = ' '.join(soup.stripped_strings)
             words = text.split()
 
-            if len(words) > 1500:
-                words = words[:1500]
+            if len(words) > 3000:
+                words = words[:3000]
                 text = ' '.join(words)
 
             if summary:
-                return text[:1500] + '...'
+                return text[:3000] + '...'
             else:
                 return text
         except Exception as e:
@@ -93,7 +93,7 @@ def process_results(results):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:3]}
+        futures = {executor.submit(fetch_content, result.link, summary=False): result for result in formatted_results[:10]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
