@@ -27,7 +27,15 @@ def get_plugin_info():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
-    responseTooLarge = request.args.get('responseTooLarge', '')
+    responseTooLarge = request.args.get('responseTooLarge', '1')
+    responseTooLarge = 1
+    try:
+        # Try to convert the string to an integer
+        responseTooLarge = int(responseTooLarge_str)
+    except ValueError:
+        # If it's not possible, then responseTooLarge remains 1
+        pass
+
     if not query:
         return jsonify({"error": "No query provided"}), 400
     
