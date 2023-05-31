@@ -87,7 +87,7 @@ def fetch_content(url, summary=False, responseTooLarge=1):
             print(f"Error fetching content: {e}")
             return None
 
-def process_results(results,responseTooLarge):
+def process_results(results, responseTooLarge):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
     
     # Initialize a ThreadPoolExecutor
