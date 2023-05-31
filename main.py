@@ -27,7 +27,7 @@ def get_plugin_info():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
-    responseTooLarge_str = request.args.get('responseTooLarge', '1')
+    responseTooLarge_str = request.args.get('responsetoolarge', '1')
     responseTooLarge = 1
     try:
         # Try to convert the string to an integer
