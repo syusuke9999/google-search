@@ -21,7 +21,7 @@ class SearchResult:
             'full_content': self.full_content
         }
 
-def fetch_content(url, summary=False, responseTooLarge=1):
+def fetch_content(url, responseTooLarge, summary=False):
     """
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
@@ -93,7 +93,7 @@ def process_results(results, responseTooLarge):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, summary=False, responseTooLarge): result for result in formatted_results[:10]}
+        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:10]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
