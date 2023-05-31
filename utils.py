@@ -27,6 +27,9 @@ def fetch_content(url, summary=False):
     Returns a summary if the summary parameter is set to True.
     """
     try:
+        if url.lower().endswith(('.pdf', '.doc', '.ppt')):
+            print(f"Error fetching content: {e}")
+            return None
         response = requests.get(url, timeout=4)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
