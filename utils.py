@@ -30,7 +30,7 @@ def fetch_content(url, summary=False):
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {e}")
             return None
-        response = requests.get(url, timeout=4)
+        response = requests.get(url, timeout=7)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
@@ -61,7 +61,7 @@ def fetch_content(url, summary=False):
 
 
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-            driver.set_page_load_timeout(4)
+            driver.set_page_load_timeout(7)
             
             try:
                 driver.get(url)
