@@ -35,7 +35,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 2000/responseTooLarge
+            fall = 3000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -74,7 +74,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 2000/responseTooLarge
+            fall = 3000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -93,7 +93,7 @@ def process_results(results, responseTooLarge):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:3]}
+        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:4]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
