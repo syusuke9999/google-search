@@ -21,7 +21,7 @@ class SearchResult:
             'full_content': self.full_content
         }
 
-def fetch_content(url, responseTooLarge, summary=False):
+def fetch_content(url, numofpages, responseTooLarge, summary=False):
     """
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
@@ -56,7 +56,7 @@ def fetch_content(url, responseTooLarge, summary=False):
                 soup = BeautifulSoup(response.text, 'lxml')
                 text = ' '.join(soup.stripped_strings)
                 words = text.split()
-                fall = round(6000/responseTooLarge)
+                fall = round(12000/(responseTooLarge*numofpages))
                 if len(words) > fall:
                     words = words[:fall]
                     text = ' '.join(words)
@@ -72,7 +72,7 @@ def fetch_content(url, responseTooLarge, summary=False):
         soup = BeautifulSoup(html_content, 'lxml')
         text = ' '.join(soup.stripped_strings)
         words = text.split()
-        fall = round(6000/responseTooLarge)
+        fall = round(12000/(responseTooLarge*numofpages))
         if len(words) > fall:
             words = words[:fall]
             text = ' '.join(words)
@@ -87,7 +87,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = round(6000/responseTooLarge)
+            fall = round(12000/(responseTooLarge*numofpages))
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -104,7 +104,7 @@ def process_results(results, numofpages, responseTooLarge):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:numofpages]}
+        futures = {executor.submit(fetch_content, result.link, numofpages, responseTooLarge, summary=False): result for result in formatted_results[:numofpages]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
