@@ -28,25 +28,29 @@ def get_plugin_info():
 def search():
     query = request.args.get('q', '')
     responseTooLarge_str = request.args.get('responsetoolarge', '')
+    numofpages_str = request.args.get('numofpages', '')
     responseTooLarge = 1
+    numofpages = 4
     try:
         # Try to convert the string to an integer
         responseTooLarge = int(responseTooLarge_str)
+        numofpages = int(numofpages_str)
     except ValueError:
         # If it's not possible, then responseTooLarge remains 1
         responseTooLarge = 1
+        numofpages = 4
         pass
 
     if not query:
         return jsonify({"error": "No query provided"}), 400
     
-    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num=10"
+    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num={numofpages}"
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
         results = data.get('items', [])
-        formatted_results = process_results(results,responseTooLarge)
+        formatted_results = process_results(results,responseTooLarge,numofpages)
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
