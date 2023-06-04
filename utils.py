@@ -30,12 +30,12 @@ def fetch_content(url, responseTooLarge, summary=False):
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {e}")
             return None
-        response = requests.get(url, timeout=7)
+        response = requests.get(url, timeout=10)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 2000/responseTooLarge
+            fall = 4000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -61,7 +61,7 @@ def fetch_content(url, responseTooLarge, summary=False):
 
 
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-            driver.set_page_load_timeout(7)
+            driver.set_page_load_timeout(10)
             
             try:
                 driver.get(url)
@@ -74,7 +74,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 2000/responseTooLarge
+            fall = 4000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -93,7 +93,7 @@ def process_results(results, responseTooLarge):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:10]}
+        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:5]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
