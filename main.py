@@ -50,7 +50,7 @@ def search():
     if response.status_code == 200:
         data = response.json()
         results = data.get('items', [])
-        formatted_results = process_results(results,responseTooLarge,numofpages)
+        formatted_results = process_results(results,numofpages,responseTooLarge)
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
