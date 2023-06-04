@@ -43,7 +43,7 @@ def fetch_content(url, responseTooLarge, summary=False):
 
 
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-        driver.set_page_load_timeout(25)
+        driver.set_page_load_timeout(15)
 
         try:
             driver.get(url)
@@ -51,12 +51,28 @@ def fetch_content(url, responseTooLarge, summary=False):
         except Exception:
             print("Timed out waiting for page to load")
             html_content = "This url is giving page fetch timeout change the query."
+            response = requests.get(url, timeout=15)
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'lxml')
+                text = ' '.join(soup.stripped_strings)
+                words = text.split()
+                fall = round(6000/responseTooLarge)
+                if len(words) > fall:
+                    words = words[:fall]
+                    text = ' '.join(words)
+
+                if summary:
+                    return text[:fall] + '...'
+                else:
+                    return text
+            else:
+                return None
         finally:
             driver.quit()
         soup = BeautifulSoup(html_content, 'lxml')
         text = ' '.join(soup.stripped_strings)
         words = text.split()
-        fall = 6000/responseTooLarge
+        fall = round(6000/responseTooLarge)
         if len(words) > fall:
             words = words[:fall]
             text = ' '.join(words)
@@ -67,6 +83,19 @@ def fetch_content(url, responseTooLarge, summary=False):
             return text
     except Exception as e:
         print(f"Error fetching content: {e}")
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'lxml')
+            text = ' '.join(soup.stripped_strings)
+            words = text.split()
+            fall = round(6000/responseTooLarge)
+            if len(words) > fall:
+                words = words[:fall]
+                text = ' '.join(words)
+
+            if summary:
+                return text[:fall] + '...'
+            else:
+                return text
         return None
 
 def process_results(results, numofpages, responseTooLarge):
