@@ -35,7 +35,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 12000/responseTooLarge
+            fall = 4000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
@@ -74,7 +74,7 @@ def fetch_content(url, responseTooLarge, summary=False):
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            fall = 12000/responseTooLarge
+            fall = 4000/responseTooLarge
             if len(words) > fall:
                 words = words[:fall]
                 text = ' '.join(words)
