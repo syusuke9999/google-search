@@ -87,13 +87,13 @@ def fetch_content(url, responseTooLarge, summary=False):
             print(f"Error fetching content")
             return None
 
-def process_results(results, responseTooLarge):
+def process_results(results, numofpages, responseTooLarge):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
     
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:5]}
+        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:numofpages]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
