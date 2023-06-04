@@ -93,7 +93,7 @@ def process_results(results, responseTooLarge):
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:5]}
+        futures = {executor.submit(fetch_content, result.link, responseTooLarge, summary=False): result for result in formatted_results[:3]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
