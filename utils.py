@@ -83,13 +83,11 @@ def fetch_content(url, numofpages, responseTooLarge, summary=False):
         driver.set_page_load_timeout(15)
 
         try:
-            url = shorten_url(url)
             driver.get(url)
             html_content = driver.page_source
         except Exception:
             print("Timed out waiting for page to load")
             html_content = "This url is giving page fetch timeout change the query."
-            url = shorten_url(url)
             response = requests.get(url, timeout=15)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'lxml')
@@ -122,6 +120,7 @@ def fetch_content(url, numofpages, responseTooLarge, summary=False):
             return text
     except Exception as e:
         print(f"Error fetching content: {e}")
+        response = requests.get(url, timeout=15)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
