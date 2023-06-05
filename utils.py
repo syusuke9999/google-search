@@ -1,5 +1,8 @@
 import os
 import requests
+import urllib.parse
+import re
+import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -20,6 +23,40 @@ class SearchResult:
             'summary': self.summary,
             'full_content': self.full_content
         }
+    
+def shorten_url(input_url):
+    # Convert URL to camel case and remove non-alphabetic characters
+    alias = re.sub(r'[^a-zA-Z]', '', ''.join(word.title() for word in input_url.split('/')))
+
+    # Limit to 10 characters
+    alias = alias[:10]
+
+    # Append timestamp
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    alias += timestamp
+
+    long_url = urllib.parse.quote(input_url)
+    api_token = '4ac178f1dcc99453e693d386fa480123'
+    ad_type = 1  # optimal
+    api_url = f'https://shrtfly.com/api?api={api_token}&url={long_url}&alias={alias}&type={ad_type}&format=json'
+
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        response_json = response.json()
+
+        if response_json['status'] == 'success':
+            return response_json['result']['shorten_url']
+        else:
+            print(f"Error: {response_json['result']}")
+            return None
+
+    except requests.exceptions.HTTPError as err:
+        print(f"HTTP error occurred: {err}")
+        return None
+    except Exception as err:
+        print(f"An error occurred: {err}")
+        return None
 
 def fetch_content(url, numofpages, responseTooLarge, summary=False):
     """
@@ -46,11 +83,13 @@ def fetch_content(url, numofpages, responseTooLarge, summary=False):
         driver.set_page_load_timeout(15)
 
         try:
+            url = shorten_url(url)
             driver.get(url)
             html_content = driver.page_source
         except Exception:
             print("Timed out waiting for page to load")
             html_content = "This url is giving page fetch timeout change the query."
+            url = shorten_url(url)
             response = requests.get(url, timeout=15)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'lxml')
