@@ -35,20 +35,19 @@ def shorten_url(input_url):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     alias += timestamp
 
-    long_url = urllib.parse.quote(input_url)
-    api_token = '4ac178f1dcc99453e693d386fa480123'
-    ad_type = 1  # optimal
-    api_url = f'https://shrtfly.com/api?api={api_token}&url={long_url}&alias={alias}&type={ad_type}&format=json'
+    headers = {"public-api-token": "df1511843a912912061c063e03b9c8f8"}
+    payload = {"urlToShorten": input_url}
+    api_url = "https://api.shorte.st/v1/data/url"
 
     try:
-        response = requests.get(api_url)
+        response = requests.put(api_url, headers=headers, data=payload)
         response.raise_for_status()
         response_json = response.json()
 
-        if response_json['status'] == 'success':
-            return response_json['result']['shorten_url']
+        if response_json['status'] == 'ok':
+            return response_json['shortenedUrl']
         else:
-            print(f"Error: {response_json['result']}")
+            print(f"Error: {response_json['status']}")
             return None
 
     except requests.exceptions.HTTPError as err:
@@ -147,11 +146,13 @@ def process_results(results, numofpages, responseTooLarge):
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
+                result.link = shorten_url(result.link)
                 result.full_content = future.result() or "Error fetching content"
                 if result.full_content is "Error fetching content":
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content: {e}")
+                result.link = shorten_url(result.link)
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
 
