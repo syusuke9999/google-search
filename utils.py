@@ -27,8 +27,8 @@ class SearchResult:
 def create_encoded_url(input_url):
     encoded_url = urllib.parse.quote_plus(input_url)
     final_url = "https://l.keymate.ai?url=" + encoded_url
-    encoded_url2 = shorten_url(input_url)
-    final_url = final_url + "&urlP=" + encoded_url2
+    #encoded_url2 = shorten_url(input_url)
+    #final_url = final_url + "&urlP=" + encoded_url2
     return final_url
 
 def shorten_url(input_url):
