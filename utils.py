@@ -24,6 +24,13 @@ class SearchResult:
             'full_content': self.full_content
         }
     
+def create_encoded_url(input_url):
+    encoded_url = urllib.parse.quote_plus(input_url)
+    final_url = "https://l.keymate.ai?url=" + encoded_url
+    encoded_url2 = shorten_url(input_url)
+    final_url = final_url + "&urlP=" + encoded_url2
+    return final_url
+
 def shorten_url(input_url):
     # Convert URL to camel case and remove non-alphabetic characters
     alias = re.sub(r'[^a-zA-Z]', '', ''.join(word.title() for word in input_url.split('/')))
@@ -146,13 +153,13 @@ def process_results(results, numofpages, responseTooLarge):
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                #result.link = shorten_url(result.link)
+                result.link = create_encoded_url(result.link)
                 result.full_content = future.result() or "Error fetching content"
                 if result.full_content is "Error fetching content":
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content: {e}")
-                #result.link = shorten_url(result.link)
+                result.link = create_encoded_url(result.link)
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
 
