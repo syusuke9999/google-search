@@ -42,19 +42,20 @@ def shorten_url(input_url):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     alias += timestamp
 
-    headers = {"public-api-token": "df1511843a912912061c063e03b9c8f8"}
-    payload = {"urlToShorten": input_url}
-    api_url = "https://api.shorte.st/v1/data/url"
+    long_url = urllib.parse.quote(input_url)
+    api_token = '4ac178f1dcc99453e693d386fa480123'
+    ad_type = 1  # optimal
+    api_url = f'https://shrtfly.com/api?api={api_token}&url={long_url}&alias={alias}&type={ad_type}&format=json'
 
     try:
-        response = requests.put(api_url, headers=headers, data=payload)
+        response = requests.get(api_url)
         response.raise_for_status()
         response_json = response.json()
 
-        if response_json['status'] == 'ok':
-            return response_json['shortenedUrl']
+        if response_json['status'] == 'success':
+            return response_json['result']['shorten_url']
         else:
-            print(f"Error: {response_json['status']}")
+            print(f"Error: {response_json['result']}")
             return None
 
     except requests.exceptions.HTTPError as err:
