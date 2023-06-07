@@ -42,20 +42,28 @@ def shorten_url(input_url):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     alias += timestamp
 
-    long_url = urllib.parse.quote(input_url)
-    api_token = '4ac178f1dcc99453e693d386fa480123'
-    ad_type = 1  # optimal
-    api_url = f'https://shrtfly.com/api?api={api_token}&url={long_url}&alias={alias}&type={ad_type}&format=json'
+    url = "https://api.short.io/links"
+
+    payload = {
+        "domain": "ln.keymate.ai",
+        "originalURL": input_url,
+        "allowDuplicates": True
+    }
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "Authorization": "sk_q01svLvu0ZuLP7Il"
+    }
 
     try:
-        response = requests.get(api_url)
+        response = requests.post(url, json=payload, headers=headers)
         response.raise_for_status()
         response_json = response.json()
 
-        if response_json['status'] == 'success':
-            return response_json['result']['shorten_url']
+        if response.status_code == 200:
+            return response_json['secureShortURL']
         else:
-            print(f"Error: {response_json['result']}")
+            print(f"Error: {response_json}")
             return None
 
     except requests.exceptions.HTTPError as err:
@@ -154,13 +162,13 @@ def process_results(results, numofpages, responseTooLarge):
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                result.link = create_encoded_url(result.link)
+                result.link = shorten_url(create_encoded_url(result.link))
                 result.full_content = future.result() or "Error fetching content"
                 if result.full_content is "Error fetching content":
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content: {e}")
-                result.link = create_encoded_url(result.link)
+                result.link = shorten_url(create_encoded_url(result.link))
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
 
