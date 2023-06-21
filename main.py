@@ -28,6 +28,8 @@ def get_plugin_info():
 @app.route('/search', methods=['GET'])
 def search():
     logging.info('Headers: %s', request.headers)
+    print('Headers:', request.headers)
+    member_id = request.headers.get('X-PluginLab-User-Id')
     query = request.args.get('q', '')
     responseTooLarge_str = request.args.get('responsetoolarge', '')
     numofpages_str = request.args.get('numofpages', '')
@@ -52,7 +54,7 @@ def search():
     if response.status_code == 200:
         data = response.json()
         results = data.get('items', [])
-        formatted_results = process_results(results,numofpages,responseTooLarge)
+        formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
