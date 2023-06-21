@@ -134,7 +134,7 @@ def fetch_content(url, numofpages, responseTooLarge, summary=False):
         else:
             return text
     except Exception as e:
-        print(f"Error fetching content: {e}")
+        print(f"Error fetching content:")
         response = requests.get(url, timeout=15)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
@@ -167,7 +167,7 @@ def process_results(results, numofpages, responseTooLarge):
                 if result.full_content is "Error fetching content":
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
-                print(f"Error in fetch_content: {e}")
+                print(f"Error in fetch_content:")
                 result.link = shorten_url(create_encoded_url(result.link))
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
