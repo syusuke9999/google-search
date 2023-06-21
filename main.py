@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import requests
 import os
 import json
+import logging
 from utils import process_results
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ def get_plugin_info():
 
 @app.route('/search', methods=['GET'])
 def search():
+    logging.info('Headers: %s', request.headers)
     query = request.args.get('q', '')
     responseTooLarge_str = request.args.get('responsetoolarge', '')
     numofpages_str = request.args.get('numofpages', '')
