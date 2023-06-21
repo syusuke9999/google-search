@@ -24,9 +24,9 @@ class SearchResult:
             'full_content': self.full_content
         }
     
-def create_encoded_url(input_url):
+def create_encoded_url(input_url,member_id):
     encoded_url = urllib.parse.quote_plus(input_url)
-    final_url = "https://l.keymate.ai?url=" + encoded_url
+    final_url = "https://l.keymate.ai?member_id="member_id+"url=" + encoded_url
     #encoded_url2 = shorten_url(input_url)
     #final_url = final_url + "&urlP=" + encoded_url2
     return final_url
@@ -73,7 +73,7 @@ def shorten_url(input_url):
         print(f"An error occurred: {err}")
         return None
 
-def fetch_content(url, numofpages, responseTooLarge, summary=False):
+def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
     """
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
@@ -151,24 +151,24 @@ def fetch_content(url, numofpages, responseTooLarge, summary=False):
                 return text
         return None
 
-def process_results(results, numofpages, responseTooLarge):
+def process_results(results, numofpages, responseTooLarge, member_id):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
     
     # Initialize a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, numofpages, responseTooLarge, summary=False): result for result in formatted_results[:numofpages]}
+        futures = {executor.submit(fetch_content, result.link, numofpages, responseTooLarge, member_id, summary=False): result for result in formatted_results[:numofpages]}
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                result.link = shorten_url(create_encoded_url(result.link))
+                result.link = shorten_url(create_encoded_url(result.link,member_id))
                 result.full_content = future.result() or "Error fetching content"
                 if result.full_content is "Error fetching content":
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content:")
-                result.link = shorten_url(create_encoded_url(result.link))
+                result.link = shorten_url(create_encoded_url(result.link,member_id))
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
 
