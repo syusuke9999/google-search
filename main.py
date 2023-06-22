@@ -30,6 +30,8 @@ def search():
     logging.info('Headers: %s', request.headers)
     print('Headers:', request.headers)
     member_id = request.headers.get('X-PluginLab-User-Id')
+    if not member_id:
+        member_id = "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b"
     query = request.args.get('q', '')
     responseTooLarge_str = request.args.get('responsetoolarge', '')
     numofpages_str = request.args.get('numofpages', '')
