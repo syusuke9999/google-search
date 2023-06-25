@@ -27,8 +27,6 @@ def get_plugin_info():
 
 @app.route('/search', methods=['GET'])
 def search():
-    logging.info('Headers: %s', request.headers)
-    print('Headers:', request.headers)
     member_id = request.headers.get('X-PluginLab-User-Id')
     if not member_id:
         member_id = "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b"
