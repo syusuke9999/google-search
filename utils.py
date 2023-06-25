@@ -3,6 +3,7 @@ import requests
 import urllib.parse
 import re
 import datetime
+import logging
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -81,7 +82,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
     try:
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {e}")
-            return None
+            return 'Add a pdf doc or ppt reader plugin for this link'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
@@ -118,7 +119,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
                 else:
                     return text
             else:
-                return None
+                return 'this site is not giving the content'
         finally:
             driver.quit()
         soup = BeautifulSoup(html_content, 'lxml')
@@ -149,7 +150,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
                 return text[:fall] + '...'
             else:
                 return text
-        return None
+        return 'this site is not giving the content'
 
 def process_results(results, numofpages, responseTooLarge, member_id):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
