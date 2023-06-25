@@ -65,14 +65,14 @@ def shorten_url(input_url):
             return response_json['secureShortURL']
         else:
             print(f"Error: {response_json}")
-            return None
+            return input_url
 
     except requests.exceptions.HTTPError as err:
-        print(f"HTTP error occurred: {err}")
-        return None
+        print(f"HTTP error occurred: {input_url}")
+        return input_url
     except Exception as err:
-        print(f"An error occurred: {err}")
-        return None
+        print(f"An error occurred: {input_url}")
+        return input_url
 
 def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
     """
@@ -81,7 +81,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
     """
     try:
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
-            print(f"Error fetching content: {e}")
+            print(f"Error fetching content: {url}")
             return 'Add a pdf doc or ppt reader plugin for this link'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
@@ -119,7 +119,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
                 else:
                     return text
             else:
-                return 'this site is not giving the content'
+                print(f"not giving content: {url}")
+                return 'this site is not giving us the content'
         finally:
             driver.quit()
         soup = BeautifulSoup(html_content, 'lxml')
@@ -150,6 +151,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
                 return text[:fall] + '...'
             else:
                 return text
+        print(f"not giving content 2: {url}")
         return 'this site is not giving the content'
 
 def process_results(results, numofpages, responseTooLarge, member_id):
