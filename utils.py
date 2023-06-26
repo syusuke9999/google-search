@@ -107,7 +107,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         
           # Use Selenium to fetch conten
         options = Options()
-        #options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
