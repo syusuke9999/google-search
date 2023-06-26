@@ -147,7 +147,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
             pdf_content = data.get('content')
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
-            text = pdf_content.join(text)
+            text = pdf_content+text
             words = text.split()
             fall = round(12000/(responseTooLarge*numofpages))
             if len(words) > fall:
