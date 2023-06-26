@@ -5,7 +5,7 @@ lxml
 python-dotenv
 flask-cors
 gunicorn
-selenium<4.10
+selenium==4.9.0
 webdriver-manager
 futures
 undetected-chromedriver
