@@ -9,3 +9,4 @@ selenium
 webdriver-manager
 futures
 undetected-chromedriver
+selenium-profiles
