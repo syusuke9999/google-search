@@ -169,6 +169,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         return 'this site is not giving the content'
 
 def get_timeout(page_number, total_pages, tot_req_secs=30):
+    if total_pages < 2:
+        tot_req_secs = tot_req_secs - 2 
             
     if total_pages < 6:
         budgetPerCall = math.floor(tot_req_secs/total_pages)
