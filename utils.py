@@ -127,8 +127,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
             driver.get(url)
             WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
             html_content = driver.page_source
-        except Exception:
-            print("Timed out waiting for page to load")
+        except Exception as e:
+            print(f"Timed out waiting for page to load 6: {e} {url}")
             html_content = "This url is giving page fetch timeout change the query."
             response = requests.get(url, timeout=idealTimeoutSecond)
             if response.status_code == 200:
@@ -162,7 +162,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         else:
             return text
     except Exception as e:
-        print(f"Error fetching content 6: {url}")
+        print(f"Error fetching content 6: {e} {url}")
         response = requests.get(url, timeout=idealTimeoutSecond)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
