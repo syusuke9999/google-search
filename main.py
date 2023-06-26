@@ -65,7 +65,9 @@ def search():
         formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
         if not formatted_results:  # if formatted_results is empty
             if is_url(query):  # if query is a URL
-                formatted_results.append({'link': query, 'title': 'User given url in query'})
+                results.append({'link': query, 'title': 'User given url in query'})
+                formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
+                return jsonify({"results": formatted_results})
             else:
                 return jsonify({"results": "Google search result is empty. There's no such information on the web."})
     
