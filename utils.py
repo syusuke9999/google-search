@@ -96,7 +96,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
 
 
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-        driver.set_page_load_timeout(15)
+        driver.set_page_load_timeout(7)
 
         try:
             driver.get(url)
@@ -104,7 +104,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
         except Exception:
             print("Timed out waiting for page to load")
             html_content = "This url is giving page fetch timeout change the query."
-            response = requests.get(url, timeout=15)
+            response = requests.get(url, timeout=7)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'lxml')
                 text = ' '.join(soup.stripped_strings)
@@ -136,8 +136,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
         else:
             return text
     except Exception as e:
-        print(f"Error fetching content:")
-        response = requests.get(url, timeout=15)
+        print(f"Error fetching content 6: {url}")
+        response = requests.get(url, timeout=7)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
