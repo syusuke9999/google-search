@@ -15,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import concurrent.futures
 
+
 class SearchResult:
     def __init__(self, title, link):
         self.title = title
