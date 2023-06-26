@@ -167,8 +167,6 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         try:
             driver.get(url)
             WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
-            driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
-            WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
             html_content = driver.page_source
         except Exception:
             print("Timed out waiting for page to load")
