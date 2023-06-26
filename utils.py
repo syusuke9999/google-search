@@ -9,6 +9,9 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 import concurrent.futures
 
 class SearchResult:
@@ -110,6 +113,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 
         try:
             driver.get(url)
+            WebDriverWait(driver, idealTimeoutFirst).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
             html_content = driver.page_source
         except Exception:
             print("Timed out waiting for page to load")
@@ -165,6 +169,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         return 'this site is not giving the content'
 
 def get_timeout(page_number, total_pages, tot_req_secs=30):
+            
     if total_pages < 6:
         budgetPerCall = math.floor(tot_req_secs/total_pages)
         budgetPageImportance = math.floor( (tot_req_secs * 0.8) / 3)+1
