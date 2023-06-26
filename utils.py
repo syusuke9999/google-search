@@ -104,8 +104,49 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-        profile = {}
-        options = ChromeOptions()
+        profile = \
+        {
+          "options": {
+              "sandbox": True,
+              "window_size": {"x":1024,"y":648},
+              "headless": False,
+              "load_images": True,
+              "incognito": True,
+              "touch": False,
+              "app": False,
+              "gpu": False
+          },
+          "cdp": {
+            "touch": True,
+            "darkmode":None,
+            "maxtouchpoints": 5,
+            "cores":8,
+            "cdp_args": [],
+            "emulation": {"mobile":True,"width": 384, "height": 700, "deviceScaleFactor": 10,
+                "screenOrientation": {"type": "portrait-primary", "angle": 0}},
+            "patch_version": True, # to patch automatically, or use "111.0.5563.111"
+            "useragent": {
+                        "platform": "Linux aarch64",
+                        "acceptLanguage":"en-US",
+                        "userAgent": "Mozilla/5.0 (Linux; Android 11; HD1913) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Mobile Safari/537.36",
+                        "userAgentMetadata": {
+                            "brands": [{"brand": "Google Chrome", "version": "105"}, {"brand": "Not)A;Brand", "version": "8"},
+                                       {"brand": "Chromium", "version": "105"}],
+                            "fullVersionList": [{"brand": "Google Chrome", "version": "105.0.5195.136"},
+                                                {"brand": "Not)A;Brand", "version": "8.0.0.0"},
+                                                {"brand": "Chromium", "version": "105.0.5195.136"}],
+                            "fullVersion": "105.0.5195.136",
+                            "platform": "Android",
+                            "platformVersion": "11.0.0",
+                            "architecture": "",
+                            "model": "HD1913",
+                            "mobile": True,
+                            "bitness": "",
+                            "wow64": False}
+            }
+          }
+        }
+        #options = ChromeOptions()
         mydriver = Chrome(profile, options=options, uc_driver=True)
         driver = mydriver.start()  # or .Android
         
