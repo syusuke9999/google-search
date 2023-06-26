@@ -4,6 +4,7 @@ import urllib.parse
 import re
 import datetime
 import logging
+import math
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -74,14 +75,20 @@ def shorten_url(input_url):
         print(f"An error occurred: {input_url}")
         return input_url
 
-def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
+def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary=False):
     """
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
     """
     totReqSecs = 30
-    idealTimeoutFirst = round(totReqSecs/(numofpages+1))
-    idealTimeoutSecond = round((totReqSecs-(idealTimeoutFirst*numofpages))/(numofpages))
+    idealTimeoutFirst = 7
+    idealTimeoutSecond = 3
+    if numofpages < 6:
+        idealTimeoutFirst = timeout
+        idealTimeoutSecond = math.floor(timeout/4)
+    else:
+        idealTimeoutFirst = timeout
+        idealTimeoutSecond =  math.floor(timeout/4)
     try:
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {url}")
@@ -157,13 +164,53 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
         print(f"not giving content 2: {url}")
         return 'this site is not giving the content'
 
+def get_timeout(page_number, total_pages, tot_req_secs=30):
+    if total_pages < 6:
+        budgetPerCall = math.floor(tot_req_secs/total_pages)
+        budgetPageImportance = math.floor( (tot_req_secs * 0.8) / 3)+1
+        if page_number <= 3:
+            # These are the important pages, allocate more time
+            if page_number is 1:
+                return math.floor(budgetPerCall*0.8)+1
+            if page_number is 2:
+                return math.floor(budgetPerCall*0.8)
+            if page_number is 3:
+                return math.floor(budgetPerCall*0.8)-1
+        else:
+            spentAbove = math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)+math.floor(budgetPerCall*0.8)-1
+            leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
+            leftNumberPages = (10 - total_pages) - 3
+            return round((leftBudget/leftNumberPages)*0.8)
+        
+    if total_pages >= 6:
+        budgetPerCall = math.floor(tot_req_secs/total_pages)
+        budgetPageImportance = math.floor( (tot_req_secs * 0.8) / 3)+1
+        if page_number <= 3:
+            # These are the important pages, allocate more time
+            if page_number is 1:
+                return math.floor(budgetPerCall*0.8)+1
+            if page_number is 2:
+                return math.floor(budgetPerCall*0.8)
+            if page_number is 3:
+                return math.floor(budgetPerCall*0.8)-1
+        else:
+            spentAbove = math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)+math.floor(budgetPerCall*0.8)-1
+            leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
+            leftNumberPages = (10 - total_pages) - 3
+            return round((leftBudget/leftNumberPages)*0.8)
+    else:
+        return 7
+
+
 def process_results(results, numofpages, responseTooLarge, member_id):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
-    
-    # Initialize a ThreadPoolExecutor
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        # Create a future for each result
-        futures = {executor.submit(fetch_content, result.link, numofpages, responseTooLarge, member_id, summary=False): result for result in formatted_results[:numofpages]}
+        futures = {}
+        for i, result in enumerate(formatted_results[:numofpages]):
+            timeout = get_timeout(i + 1, numofpages)
+            future = executor.submit(fetch_content, result.link, numofpages, responseTooLarge, member_id, timeout, summary=False)
+            futures[future] = result
 
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
@@ -177,5 +224,6 @@ def process_results(results, numofpages, responseTooLarge, member_id):
                 result.link = shorten_url(create_encoded_url(result.link,member_id))
                 result.full_content = "Error fetching content"
                 result.summary = "Redirect user to links if Error fetching content occurs on full_content"
+
 
     return [res.to_dict() for res in formatted_results]
