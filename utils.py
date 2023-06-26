@@ -144,7 +144,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
             
             # Get the htmlContent and pdfContent
             html_content = data.get('htmlContent')
-            pdf_content = data.get('content')
+            pdf_content = data.get('pdfContent')
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             text = pdf_content+text
