@@ -5,6 +5,7 @@ import re
 import datetime
 import logging
 import math
+import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -99,16 +100,21 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-        # Use Selenium to fetch conten
         options = Options()
-        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        options = webdriver.ChromeOptions() 
+        options.add_argument("start-maximized")
         options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
-
-
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+        driver = uc.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+        # Use Selenium to fetch conten
+        #options = Options()
+        #options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        #options.add_argument('--headless')
+        #options.add_argument('--disable-gpu')
+        #options.add_argument('--no-sandbox')
+        #options.add_argument('--disable-dev-shm-usage')
+        #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
         driver.set_page_load_timeout(idealTimeoutFirst)
 
         try:
