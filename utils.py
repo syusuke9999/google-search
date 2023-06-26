@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 import urllib.parse
 import re
 import datetime
@@ -117,19 +118,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
         #driver.set_page_load_timeout(idealTimeoutFirst)
         #finish
-        response = requests.get('https://crawler-opal.vercel.app/api/pdf?url='.join(url))
-
-        # Parse the JSON response
-        data = json.loads(response.text)
         
-        # Get the htmlContent and pdfContent
-        html_content = data.get('htmlContent')
-        pdf_content = data.get('content')
-        
-        # Now you can use html_content and pdf_content in your Python code
-        print(html_content)
-        print(pdf_content)
-
+    
         
 
         #driver = uc.Chrome()
@@ -146,6 +136,14 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         
 
         try:
+            response = requests.get('https://crawler-opal.vercel.app/api/pdf?url='.join(url))
+
+            # Parse the JSON response
+            data = json.loads(response.text)
+            
+            # Get the htmlContent and pdfContent
+            html_content = data.get('htmlContent')
+            pdf_content = data.get('content')
             soup = BeautifulSoup(html_content, 'lxml')
             text = ' '.join(soup.stripped_strings)
             text = pdf_content.join(text)
@@ -182,8 +180,8 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
             else:
                 print(f"not giving content: {url}")
                 return 'this site is not giving us the content'
-        finally:
-            #driver.quit()
+        #finally:
+        #driver.quit()
         soup = BeautifulSoup(html_content, 'lxml')
         text = ' '.join(soup.stripped_strings)
         words = text.split()
