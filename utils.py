@@ -262,7 +262,7 @@ def process_results(results, numofpages, responseTooLarge, member_id):
         futures = {}
         for i, result in enumerate(formatted_results[:numofpages]):
             timeout = get_timeout(i + 1, numofpages)
-            future = executor.submit(fetch_content, result.link, numofpages, responseTooLarge, member_id, math.floor(timeout*1.5), summary=False)
+            future = executor.submit(fetch_content, result.link, numofpages, responseTooLarge, member_id, math.floor(timeout), summary=False)
             futures[future] = result
 
         for future in concurrent.futures.as_completed(futures):
