@@ -5,7 +5,6 @@ import requests
 import os
 import json
 import logging
-from urllib.parse import urlparse
 from utils import process_results
 
 app = Flask(__name__)
@@ -26,13 +25,6 @@ def get_plugin_info():
 
         return jsonify(data)
 
-def is_url(query):
-    try:
-        result = urlparse(query)
-        return all([result.scheme, result.netloc])
-    except ValueError:
-        return False
-        
 @app.route('/search', methods=['GET'])
 def search():
     member_id = request.headers.get('X-PluginLab-User-Id')
@@ -63,16 +55,10 @@ def search():
         data = response.json()
         results = data.get('items', [])
         formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
-        if not formatted_results:  # if formatted_results is empty
-            if is_url(query):  # if query is a URL
-                formatted_results.append({'link': query, 'title': 'User given url in query'})
-            else:
-                jsonify({"results": "Google search result is empty. There's no such information on the web.")
-    
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
-        print(f"Google API gave error fetching search results: {error_data}")  # Print the error data
+        print(f"Error fetching search results: {error_data}")  # Print the error data
         return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
 
 @app.route('/.well-known/<path:filename>')
