@@ -8,5 +8,5 @@ gunicorn
 selenium
 webdriver-manager
 futures
-undetected-chromedriver==3.4.7
+undetected-chromedriver
 selenium-profiles
