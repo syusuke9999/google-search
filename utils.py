@@ -149,7 +149,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         #options = ChromeOptions()
         mydriver = Chrome(profile, options=options, uc_driver=True)
         driver = mydriver.start()  # or .Android
-        driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+        
         
 
         #driver = uc.Chrome()
@@ -166,7 +166,9 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 
         try:
             driver.get(url)
-            WebDriverWait(driver, idealTimeoutFirst).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+            WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+            driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+            WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
             html_content = driver.page_source
         except Exception:
             print("Timed out waiting for page to load")
