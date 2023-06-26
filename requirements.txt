@@ -8,3 +8,4 @@ gunicorn
 selenium
 webdriver-manager
 futures
+undetected-chromedriver
