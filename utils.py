@@ -105,16 +105,30 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
         
-          # Use Selenium to fetch conten
-        options = Options()
-        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
+        #Start
+        #options = Options()
+        #options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        #options.add_argument('--headless')
+        #options.add_argument('--disable-gpu')
+        #options.add_argument('--no-sandbox')
+        #options.add_argument('--disable-dev-shm-usage')
 
 
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+        #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+        #driver.set_page_load_timeout(idealTimeoutFirst)
+        #finish
+        response = requests.get('https://crawler-opal.vercel.app/api/pdf?url='.join(url))
+
+        # Parse the JSON response
+        data = json.loads(response.text)
+        
+        # Get the htmlContent and pdfContent
+        html_content = data.get('htmlContent')
+        pdf_content = data.get('content')
+        
+        # Now you can use html_content and pdf_content in your Python code
+        print(html_content)
+        print(pdf_content)
 
         
 
@@ -128,12 +142,26 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         #options.add_argument('--no-sandbox')
         #options.add_argument('--disable-dev-shm-usage')
         #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-        driver.set_page_load_timeout(idealTimeoutFirst)
+        
+        
 
         try:
-            driver.get(url)
-            WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
-            html_content = driver.page_source
+            soup = BeautifulSoup(html_content, 'lxml')
+            text = ' '.join(soup.stripped_strings)
+            text = pdf_content.join(text)
+            words = text.split()
+            fall = round(12000/(responseTooLarge*numofpages))
+            if len(words) > fall:
+                words = words[:fall]
+                text = ' '.join(words)
+    
+            if summary:
+                return text[:fall] + '...'
+            else:
+                return text
+            #driver.get(url)
+            #WebDriverWait(driver, math.floor(idealTimeoutFirst/4)).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+            #html_content = driver.page_source
         except Exception as e:
             print(f"Timed out waiting for page to load 6: {e} {url}")
             html_content = "This url is giving page fetch timeout change the query."
@@ -155,7 +183,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
                 print(f"not giving content: {url}")
                 return 'this site is not giving us the content'
         finally:
-            driver.quit()
+            #driver.quit()
         soup = BeautifulSoup(html_content, 'lxml')
         text = ' '.join(soup.stripped_strings)
         words = text.split()
