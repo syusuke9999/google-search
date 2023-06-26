@@ -104,10 +104,13 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-        profile = {}
+        
         options = ChromeOptions()
-        mydriver = Chrome(profile, options=options, uc_driver=True)
-        driver = mydriver.start()  # or .Android
+        options.add_argument("start-maximized")
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        driver = uc.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
         
         
 
