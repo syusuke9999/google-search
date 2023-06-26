@@ -79,6 +79,9 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
     """
+    totReqSecs = 30
+    idealTimeoutFirst = round(totReqSecs/(numofpages+1))
+    idealTimeoutSecond = round((totReqSecs-(idealTimeoutFirst*numofpages))/(numofpages))
     try:
         if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {url}")
@@ -96,7 +99,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
 
 
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
-        driver.set_page_load_timeout(7)
+        driver.set_page_load_timeout(idealTimeoutFirst)
 
         try:
             driver.get(url)
@@ -104,7 +107,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
         except Exception:
             print("Timed out waiting for page to load")
             html_content = "This url is giving page fetch timeout change the query."
-            response = requests.get(url, timeout=7)
+            response = requests.get(url, timeout=idealTimeoutSecond)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'lxml')
                 text = ' '.join(soup.stripped_strings)
@@ -137,7 +140,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, summary=False):
             return text
     except Exception as e:
         print(f"Error fetching content 6: {url}")
-        response = requests.get(url, timeout=7)
+        response = requests.get(url, timeout=idealTimeoutSecond)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
