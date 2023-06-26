@@ -149,6 +149,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         #options = ChromeOptions()
         mydriver = Chrome(profile, options=options, uc_driver=True)
         driver = mydriver.start()  # or .Android
+        driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
         
 
         #driver = uc.Chrome()
