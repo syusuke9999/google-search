@@ -90,14 +90,15 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
     Returns a summary if the summary parameter is set to True.
     """
     totReqSecs = 30
-    idealTimeoutFirst = 7
-    idealTimeoutSecond = 3
+    
     if numofpages < 6:
         idealTimeoutFirst = timeout
         idealTimeoutSecond = math.floor(timeout/4)
     else:
         idealTimeoutFirst = timeout
         idealTimeoutSecond =  math.floor(timeout/4)
+    idealTimeoutFirst = 15
+    idealTimeoutSecond = 15
     try:
         if url.lower().endswith(('.doc', '.ppt')):
             print(f"Error fetching content: {url}")
