@@ -39,7 +39,7 @@ def search():
     if not member_id:
         member_id = "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b"
     query = request.args.get('q', '')
-    responseTooLarge_str = request.args.get('responsetoolarge', '')
+    responseTooLarge_str = request.args.get('percentile', '')
     numofpages_str = request.args.get('numofpages', '')
     responseTooLarge = 1
     numofpages = 4
