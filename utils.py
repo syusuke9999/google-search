@@ -97,7 +97,6 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
     else:
         idealTimeoutFirst = timeout
         idealTimeoutSecond =  math.floor(timeout/4)
-    idealTimeoutFirst = 27
     try:
         if url.lower().endswith(('.doc', '.ppt')):
             print(f"Error fetching content: {url}")
@@ -217,6 +216,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 def get_timeout(page_number, total_pages, tot_req_secs=30):
     if total_pages < 2:
         tot_req_secs = tot_req_secs - 2 
+        return tot_req_secs
             
     if total_pages < 6:
         budgetPerCall = math.floor(tot_req_secs/total_pages)
