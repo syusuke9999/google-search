@@ -268,15 +268,24 @@ def process_results(results, numofpages, responseTooLarge, member_id):
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                result.link = shorten_url(create_encoded_url(result.link,member_id))
-                result.full_content = future.result() or "Error fetching content"
-                if result.full_content is "Error fetching content":
-                    result.summary = "Redirect user to links if Error fetching content occurs on full_content"
+                if member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b":
+                    result.full_content = future.result() or "Error fetching content"
+                    if result.full_content is "Error fetching content":
+                        result.summary = "Redirect user to links if Error fetching content occurs on full_content"
+                else:
+                    result.link = shorten_url(create_encoded_url(result.link,member_id))
+                    result.full_content = future.result() or "Error fetching content"
+                    if result.full_content is "Error fetching content":
+                        result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content:")
-                result.link = shorten_url(create_encoded_url(result.link,member_id))
-                result.full_content = "Error fetching content"
-                result.summary = "Redirect user to links if Error fetching content occurs on full_content"
+                if member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b":
+                    result.full_content = "Error fetching content"
+                    result.summary = "Redirect user to links if Error fetching content occurs on full_content"
+                else:     
+                    result.link = shorten_url(create_encoded_url(result.link,member_id))
+                    result.full_content = "Error fetching content"
+                    result.summary = "Redirect user to links if Error fetching content occurs on full_content"
 
 
     return [res.to_dict() for res in formatted_results]
