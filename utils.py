@@ -137,7 +137,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 
         try:
             encoded_url = urllib.parse.quote_plus(url)
-            response = requests.get(f'https://crawler-opal.vercel.app/api/pdf?url={encoded_url}', timeout=idealTimeoutFirst)
+            response = requests.get(f'https://crawler-opal.vercel.app/api/pdf?url={encoded_url}&timeout={idealTimeoutFirst}', timeout=idealTimeoutFirst)
 
             # Parse the JSON response
             data = json.loads(response.text)
