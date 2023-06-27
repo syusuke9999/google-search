@@ -97,6 +97,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
     else:
         idealTimeoutFirst = timeout
         idealTimeoutSecond =  math.floor(timeout/4)
+    idealTimeoutFirst = 27
     try:
         if url.lower().endswith(('.doc', '.ppt')):
             print(f"Error fetching content: {url}")
