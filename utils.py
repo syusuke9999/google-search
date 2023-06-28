@@ -98,7 +98,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
         idealTimeoutFirst = timeout
         idealTimeoutSecond =  math.floor(timeout/4)
     try:
-        if url.lower().endswith(('.doc', '.ppt')):
+        if url.lower().endswith(('.pdf', '.doc', '.ppt')):
             print(f"Error fetching content: {url}")
             return 'Add a pdf doc or ppt reader plugin for this link'
         headers = {
