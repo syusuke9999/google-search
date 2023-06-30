@@ -41,5 +41,9 @@ response = requests.patch(
 
 if response.status_code == 200:
     print(f'Successfully updated config vars.')
+    response = requests.get(
+        f'https://api.vercel.com/v1/integrations/deploy/prj_3T3hjTU4PoltpYHkdPYW6QyUqMmV/qSBJZSsfob'
+    )
+    
 else:
     print(f'Failed to update config vars.')
