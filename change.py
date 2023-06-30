@@ -44,6 +44,8 @@ if response.status_code == 200:
     response = requests.get(
         f'https://api.vercel.com/v1/integrations/deploy/prj_3T3hjTU4PoltpYHkdPYW6QyUqMmV/qSBJZSsfob'
     )
+    print(response.status_code)
+    print(response.text)
     
 else:
     print(f'Failed to update config vars.')
