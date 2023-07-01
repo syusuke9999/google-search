@@ -224,13 +224,13 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         if page_number <= 3:
             # These are the important pages, allocate more time
             if page_number is 1:
-                return math.floor(budgetPerCall*0.8)+4
+                return math.floor(budgetPerCall*0.8)+5
             if page_number is 2:
-                return math.floor(budgetPerCall*0.8)+3
+                return math.floor(budgetPerCall*0.8)+4
             if page_number is 3:
-                return math.floor(budgetPerCall*0.8)+2
+                return math.floor(budgetPerCall*0.8)+3
         else:
-            spentAbove = math.floor(budgetPerCall*0.8)+4+math.floor(budgetPerCall*0.8)+3+math.floor(budgetPerCall*0.8)+2
+            spentAbove = math.floor(budgetPerCall*0.8)+5+math.floor(budgetPerCall*0.8)+4+math.floor(budgetPerCall*0.8)+3
             leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
             leftNumberPages = total_pages - 3
             return round((leftBudget/leftNumberPages)*0.8)
@@ -241,13 +241,13 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         if page_number <= 3:
             # These are the important pages, allocate more time
             if page_number is 1:
-                return math.floor(budgetPerCall*0.8)+2
+                return math.floor(budgetPerCall*0.8)+3
             if page_number is 2:
-                return math.floor(budgetPerCall*0.8)+1
+                return math.floor(budgetPerCall*0.8)+2
             if page_number is 3:
-                return math.floor(budgetPerCall*0.8)
+                return math.floor(budgetPerCall*0.8)+1
         else:
-            spentAbove = math.floor(budgetPerCall*0.8)+2+math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)
+            spentAbove = math.floor(budgetPerCall*0.8)+3+math.floor(budgetPerCall*0.8)+2+math.floor(budgetPerCall*0.8)+1
             leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
             leftNumberPages = total_pages - 3
             return math.floor((leftBudget/leftNumberPages)*0.8)
