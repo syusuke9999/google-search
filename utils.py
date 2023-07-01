@@ -241,13 +241,13 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         if page_number <= 3:
             # These are the important pages, allocate more time
             if page_number is 1:
-                return math.floor(budgetPerCall*0.8)+5
+                return math.floor(budgetPerCall*0.8)+1
             if page_number is 2:
-                return math.floor(budgetPerCall*0.8)+4
+                return math.floor(budgetPerCall*0.8)
             if page_number is 3:
-                return math.floor(budgetPerCall*0.8)+3
+                return math.floor(budgetPerCall*0.8)-1
         else:
-            spentAbove = math.floor(budgetPerCall*0.8)+5+math.floor(budgetPerCall*0.8)+4+math.floor(budgetPerCall*0.8)+3
+            spentAbove = math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)+math.floor(budgetPerCall*0.8)-1
             leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
             leftNumberPages = total_pages - 3
             return round((leftBudget/leftNumberPages)*0.8)
@@ -259,6 +259,8 @@ def process_results(results, numofpages, responseTooLarge, member_id):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
     hasSub = False
     planId = ""
+    if numofpages > 10:
+        numofpages = 10
      # Check if member_id exists
     if member_id:
         # Make the HTTP request
@@ -298,7 +300,7 @@ def process_results(results, numofpages, responseTooLarge, member_id):
                         result.summary = "Redirect user to links if Error fetching content occurs on full_content"
             except Exception as e:
                 print(f"Error in fetch_content:")
-                if member_id == member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b" or planId == "as28lPJNzmZFP1L7m9Mq" or planId == "d2qYat6vo0dziP7ec8Bw":
+                if member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b" or planId == "as28lPJNzmZFP1L7m9Mq" or planId == "d2qYat6vo0dziP7ec8Bw":
                     result.full_content = "Error fetching content"
                     result.summary = "Redirect user to links if Error fetching content occurs on full_content"
                 else:     
