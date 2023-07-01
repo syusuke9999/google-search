@@ -54,8 +54,8 @@ def search():
         pass
     if numofpages > 10:
         numofpages = 10
-    if responsetoolarge < 1:
-        responsetoolarge = 1
+    if responseTooLarge < 1:
+        responseTooLarge = 1
     if not query:
         return jsonify({"error": "No query provided"}), 400
     
