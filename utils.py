@@ -215,7 +215,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 
 def get_timeout(page_number, total_pages, tot_req_secs=30):
     if total_pages < 2:
-        tot_req_secs = tot_req_secs - 5 
+        tot_req_secs = tot_req_secs - 8 
         return tot_req_secs
             
     if total_pages < 6:
