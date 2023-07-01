@@ -58,27 +58,32 @@ def search():
         responseTooLarge = 1
     if not query:
         return jsonify({"error": "No query provided"}), 400
-    
-    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num={numofpages}"
-    response = requests.get(url)
 
-    if response.status_code == 200:
-        data = response.json()
-        results = data.get('items', [])
+    if is_url(query):  # if query is a URL
+        results.append({'link': query, 'title': 'User given url in query'})
         formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
-        if not formatted_results:  # if formatted_results is empty
-            if is_url(query):  # if query is a URL
-                results.append({'link': query, 'title': 'User given url in query'})
-                formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
-                return jsonify({"results": formatted_results})
-            else:
-                return jsonify({"results": "Google search result is empty. There's no such information on the web."})
-    
         return jsonify({"results": formatted_results})
     else:
-        error_data = response.json()  # Get JSON data from the error response
-        print(f"Google API gave error fetching search results: {error_data}")  # Print the error data
-        return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
+        url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num={numofpages}"
+        response = requests.get(url)
+    
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get('items', [])
+            formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
+            if not formatted_results:  # if formatted_results is empty
+                if is_url(query):  # if query is a URL
+                    results.append({'link': query, 'title': 'User given url in query'})
+                    formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
+                    return jsonify({"results": formatted_results})
+                else:
+                    return jsonify({"results": "Google search result is empty. There's no such information on the web."})
+        
+            return jsonify({"results": formatted_results})
+        else:
+            error_data = response.json()  # Get JSON data from the error response
+            print(f"Google API gave error fetching search results: {error_data}")  # Print the error data
+            return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
 
 @app.route('/.well-known/<path:filename>')
 def serve_well_known_files(filename):
