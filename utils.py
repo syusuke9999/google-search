@@ -89,7 +89,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
     Fetches the content of the given URL.
     Returns a summary if the summary parameter is set to True.
     """
-    totReqSecs = 27
+    totReqSecs = 28
     
     if numofpages < 6:
         idealTimeoutFirst = timeout
@@ -215,7 +215,7 @@ def fetch_content(url, numofpages, responseTooLarge, member_id, timeout, summary
 
 def get_timeout(page_number, total_pages, tot_req_secs=30):
     if total_pages < 2:
-        tot_req_secs = tot_req_secs - 8 
+        tot_req_secs = tot_req_secs - 7
         return tot_req_secs
             
     if total_pages < 6:
@@ -224,13 +224,13 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         if page_number <= 3:
             # These are the important pages, allocate more time
             if page_number is 1:
-                return math.floor(budgetPerCall*0.8)+1
+                return math.floor(budgetPerCall*0.8)+4
             if page_number is 2:
-                return math.floor(budgetPerCall*0.8)
+                return math.floor(budgetPerCall*0.8)+3
             if page_number is 3:
-                return math.floor(budgetPerCall*0.8)-1
+                return math.floor(budgetPerCall*0.8)+2
         else:
-            spentAbove = math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)+math.floor(budgetPerCall*0.8)-1
+            spentAbove = math.floor(budgetPerCall*0.8)+4+math.floor(budgetPerCall*0.8)+3+math.floor(budgetPerCall*0.8)+2
             leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
             leftNumberPages = total_pages - 3
             return round((leftBudget/leftNumberPages)*0.8)
@@ -241,16 +241,16 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         if page_number <= 3:
             # These are the important pages, allocate more time
             if page_number is 1:
-                return math.floor(budgetPerCall*0.8)+1
+                return math.floor(budgetPerCall*0.8)+2
             if page_number is 2:
-                return math.floor(budgetPerCall*0.8)
+                return math.floor(budgetPerCall*0.8)+1
             if page_number is 3:
-                return math.floor(budgetPerCall*0.8)-1
+                return math.floor(budgetPerCall*0.8)
         else:
-            spentAbove = math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)+math.floor(budgetPerCall*0.8)-1
+            spentAbove = math.floor(budgetPerCall*0.8)+2+math.floor(budgetPerCall*0.8)+1+math.floor(budgetPerCall*0.8)
             leftBudget = (tot_req_secs - math.floor((budgetPerCall*0.2)*3))-spentAbove
             leftNumberPages = total_pages - 3
-            return round((leftBudget/leftNumberPages)*0.8)
+            return math.floor((leftBudget/leftNumberPages)*0.8)
     else:
         return 7
 
