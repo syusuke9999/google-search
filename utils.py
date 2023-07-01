@@ -257,6 +257,23 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
 
 def process_results(results, numofpages, responseTooLarge, member_id):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
+    hasSub = False
+    planId = ""
+     # Check if member_id exists
+    if member_id:
+        # Make the HTTP request
+        response = requests.get(f"https://nodejs-serverless-function-express-sigma-tawny.vercel.app/api/hello?memid={member_id}")
+        data = response.json()
+        
+
+        # Set the counter based on the response
+        if data.get('planId'):
+            hasSub = True
+            planId = data.get('planId')
+        else:
+            hasSub = False
+    else:
+        print('member_id is not provided in the function')
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
@@ -268,7 +285,7 @@ def process_results(results, numofpages, responseTooLarge, member_id):
         for future in concurrent.futures.as_completed(futures):
             result = futures[future]
             try:
-                if member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b":
+                if member_id == "mem_cc2de691e5fd21434aa032157d1983fdec5fd56b" or ( planId == "as28lPJNzmZFP1L7m9Mq" or planId == "d2qYat6vo0dziP7ec8Bw" or planId == "Hhyu3vl6RKYhCrOVwqKT"):
                     result.full_content = future.result() or "Error fetching content"
                     if result.full_content is "Error fetching content":
                         result.summary = "Redirect user to links if Error fetching content occurs on full_content"
