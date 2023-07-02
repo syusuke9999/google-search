@@ -60,6 +60,7 @@ def search():
         return jsonify({"error": "No query provided"}), 400
 
     if is_url(query):  # if query is a URL
+        results = []
         results.append({'link': query, 'title': 'User given url in query'})
         formatted_results = process_results(results,numofpages,responseTooLarge,member_id)
         return jsonify({"results": formatted_results})
