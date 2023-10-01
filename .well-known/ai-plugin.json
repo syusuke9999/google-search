@@ -12,7 +12,7 @@
     "url": "https://github.com/syusuke9999/google-search/blob/main/.well-known/openapi.yaml",
     "has_user_authentication": false
   },
-  "logo_url": "https://searchweb.keymate.ai/.well-known/icon.png",
+  "logo_url": "https://github.com/syusuke9999/google-search/blob/main/.well-known/icon.png",
   "contact_email": "ozgur@albumera.com",
   "legal_info_url": "https://searchweb.keymate.ai/"
 }
