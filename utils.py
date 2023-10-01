@@ -221,11 +221,11 @@ def get_timeout(page_number, total_pages, tot_req_secs=30):
         budgetPageImportance = math.floor((tot_req_secs * 0.8) / 3) + 1
         if page_number <= 3:
             # These are the important pages, allocate more time
-            if page_number is 1:
+            if page_number == 1:
                 return math.floor(budgetPerCall * 0.8) + 3
-            if page_number is 2:
+            if page_number == 2:
                 return math.floor(budgetPerCall * 0.8) + 2
-            if page_number is 3:
+            if page_number == 3:
                 return math.floor(budgetPerCall * 0.8) + 1
         else:
             spentAbove = math.floor(budgetPerCall * 0.8) + 3 + math.floor(budgetPerCall * 0.8) + 2 + math.floor(
